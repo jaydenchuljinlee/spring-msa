@@ -1,7 +1,7 @@
 package com.bbrick.auth.view.web.user;
 
 import com.bbrick.auth.comn.BaseResponse;
-import com.bbrick.auth.core.user.application.UserDetailQueryService;
+import com.bbrick.auth.core.user.application.UserDetailService;
 import com.bbrick.auth.core.user.application.UserJoinService;
 import com.bbrick.auth.core.user.domain.entity.UserDetail;
 import com.bbrick.auth.view.web.user.dto.UserJoinRequest;
@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserController {
     private final UserJoinService userJoinService;
-    private final UserDetailQueryService userDetailQueryService;
+    private final UserDetailService userDetailQueryService;
 
     @PostMapping
     public ResponseEntity<BaseResponse<UserJoinResponse>> joinUser(

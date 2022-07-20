@@ -1,4 +1,4 @@
-package com.bbrick.auth.config.security.filter;
+package com.bbrick.auth.config.security.handler.session;
 
 import com.bbrick.auth.comn.BaseResponse;
 import com.bbrick.auth.comn.exceptions.AuthenticationException;

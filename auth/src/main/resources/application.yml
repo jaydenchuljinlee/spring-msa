@@ -18,3 +18,11 @@ spring:
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: localhost
+    port: 6379
+---
+config:
+  auth:
+    secret: youcantrevealthesecretkey1234012300040
+    token-expiration-hour: 1480849147370

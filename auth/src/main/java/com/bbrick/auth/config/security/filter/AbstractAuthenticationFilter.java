@@ -6,10 +6,10 @@ import com.bbrick.auth.config.security.authentication.AuthenticatedAuthenticatio
 import com.bbrick.auth.config.security.authentication.EmailPasswordAuthentication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,14 +24,11 @@ import static java.util.stream.Collectors.joining;
 
 @Slf4j
 @RequiredArgsConstructor
-public class AuthenticationFilter extends OncePerRequestFilter {
+public abstract class AbstractAuthenticationFilter extends OncePerRequestFilter {
     private final RequestMatcher requestMatcher;
     private final AuthenticationManager authenticationManager;
-    private final AuthenticationSuccessHandler authenticationSuccessHandler;
-    private final AuthenticationFailHandler authenticationFailHandler;
-    private final SessionAuthenticationStrategy sessionAuthenticationStrategy;
 
-
+    @SneakyThrows
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (!this.requiresAuthentication(request)) {
@@ -42,10 +39,11 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         try {
             AuthenticatedAuthentication authentication = this.attemptAuthentication(request);
 
-            this.sessionAuthenticationStrategy.onAuthentication(authentication, request, response);
-            this.authenticationSuccessHandler.handle(request, response, authentication);
+            // 이를 구현한 하위 객체에서 인가에 대한 처리를 한다.
+            this.handleAuthenticatedSuccess(request, response, authentication);
         } catch(AuthenticationException e) {
-            this.authenticationFailHandler.handle(request, response, e);
+            // 이를 구현한 하위 객체에서 인가에 대한 처리를 한다.
+            this.handleAuthenticatedFail(request, response, e);
         }
     }
 
@@ -79,10 +77,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean isEmailPasswordAuthenticationRequest(Map<String, String> requestBody) {
-       String email = this.getRequestEmail(requestBody);
-       String password = this.getRequestPassword(requestBody);
+        String email = this.getRequestEmail(requestBody);
+        String password = this.getRequestPassword(requestBody);
 
-       return StringUtils.isNotBlank(email) && StringUtils.isNoneBlank(password);
+        return StringUtils.isNotBlank(email) && StringUtils.isNoneBlank(password);
     }
 
     private String getRequestEmail(Map<String, String> requestBody) {
@@ -92,4 +90,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     private String getRequestPassword(Map<String, String> requestBody) {
         return requestBody.get(WebConstants.RequestParameter.LOGIN_PASSWORD);
     }
+
+    protected abstract void handleAuthenticatedSuccess(HttpServletRequest request, HttpServletResponse response, AuthenticatedAuthentication authentication);
+
+    protected abstract void handleAuthenticatedFail(HttpServletRequest request, HttpServletResponse response, AuthenticationException authenticationException) throws Exception;
 }

@@ -1,4 +1,4 @@
-package com.bbrick.auth.config.security.filter;
+package com.bbrick.auth.config.security.handler.session;
 
 import com.bbrick.auth.comn.BaseResponse;
 import com.bbrick.auth.comn.web.session.SessionUtils;
@@ -14,8 +14,11 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class AuthenticationSuccessHandler {
-    public void handle(HttpServletRequest request, HttpServletResponse response, AuthenticatedAuthentication authentication) throws IOException {
 
+    public void handle(HttpServletRequest request, HttpServletResponse response, AuthenticatedAuthentication authentication) throws IOException {
+        this.setSecurityContextAuthentication(authentication);
+        this.setSession(request, authentication);
+        this.setResponse(response);
     }
 
     private void setSecurityContextAuthentication(AuthenticatedAuthentication authentication) {
