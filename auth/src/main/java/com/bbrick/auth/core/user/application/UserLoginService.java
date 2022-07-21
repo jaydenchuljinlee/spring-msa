@@ -38,12 +38,17 @@ public class UserLoginService {
         return TokenDto.of(accessToken, refreshToken.getRefreshToken());
     }
 
-    public LogoutAccessToken logout(TokenDto tokenDto, String email) {
+    public LogoutAccessToken logout(TokenDto tokenDto) {
+
+        String email = tokenService.getEmail(tokenDto.getAcccessToken());
+
         return tokenService.proccessLogout(email, tokenDto);
     }
 
+    // TODO 리프레시 토큰 로직 검증 필요
     public TokenDto reissue(String refreshToken) {
-        String email = getEmail();
+        // TODO refreshToken으로 이메일을 가져올 수 있나??
+        String email = tokenService.getEmail(refreshToken);
         RefreshToken savedRefreshToken = tokenService.getRefreshToken(email);
 
         if (!refreshToken.equals(savedRefreshToken.getRefreshToken())) {

@@ -1,5 +1,6 @@
 package com.bbrick.auth.comn.utils;
 
+import com.bbrick.auth.comn.request.header.dto.RequestHeaderType;
 import com.bbrick.auth.core.auth.dto.LogoutAccessToken;
 import com.bbrick.auth.core.auth.dto.RefreshToken;
 import io.jsonwebtoken.Claims;
@@ -9,20 +10,21 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
-import java.nio.charset.StandardCharsets;
+import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Date;
 
 @Slf4j
-// @NoArgsConstructor
 @Component
 public class JwtTokenUtil {
     @Value("${config.auth.secret}")
     private String secret;
 
     // private final Long tokenExpirationHour = 30 * 60 * 1000L;
-
+    private static final String JWT_TOKEN_EXCEPT_STRING = "Bearer ";
+    private static final int JWT_TOKEN_STRING_START = 7;
     private static final long ACCESS_TOKEN_EXPIRATION_TIME = 1000L * 60 * 30; // 30분
     private static final long REFRESH_TOKEN_EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 7; // 7일
 
@@ -42,8 +44,8 @@ public class JwtTokenUtil {
 
     private String generateToken(String email, long expiration) {
 
-        Claims claims = Jwts.claims().setSubject(email);
-        // claims.put("roles", roles);
+        Claims claims = Jwts.claims();
+        claims.put("email", email);
 
         Date now = new Date();
 
@@ -56,16 +58,16 @@ public class JwtTokenUtil {
     }
 
     public String getEmail(String token) {
-        return extractClaims(token).getSubject();
-    }
+       Claims claims = extractClaims(token);
 
-    public boolean validateToken(String token) {
-        return !this.isExpiredToken(token);
+       String email = claims.get("email", String.class);
+
+        return email;
     }
 
     public boolean isExpiredToken(String token) {
         Date expiration = extractClaims(token).getExpiration();
-       return expiration.after(new Date());
+       return expiration.before(new Date());
     }
 
     public Claims extractClaims(String token) {
@@ -87,4 +89,13 @@ public class JwtTokenUtil {
 
         return expiration.getTime() - now.getTime();
     }
+
+    public String getToken(HttpServletRequest request, RequestHeaderType tokenType) {
+        String authorization = request.getHeader(tokenType.value());
+
+        if (!(StringUtils.hasText(authorization) && authorization.startsWith(JWT_TOKEN_EXCEPT_STRING))) { return null; }
+
+        return authorization.substring(JWT_TOKEN_STRING_START);
+    }
+
 }

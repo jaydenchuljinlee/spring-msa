@@ -1,6 +1,7 @@
 package com.bbrick.auth.config.security.filter.jwt;
 
 import com.bbrick.auth.comn.exceptions.AuthenticationException;
+import com.bbrick.auth.comn.request.header.dto.RequestHeaderType;
 import com.bbrick.auth.comn.utils.JwtTokenUtil;
 import com.bbrick.auth.comn.web.WebConstants;
 import com.bbrick.auth.config.security.authentication.AuthenticatedAuthentication;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,55 +37,29 @@ import static java.util.stream.Collectors.joining;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    private static final String JWT_TOKEN_EXCEPT_STRING = "Bearer ";
-    private static final int JWT_TOKEN_STRING_START = 7;
-
     private final UserDetailService userDetailService;
+    private final TokenService tokenService;
     private final JwtAuthenticationSuccessHandler jwtAuthenticationSuccessHandler;
     private final JwtAuthenticationFailHandler jwtAuthenticationFailHandler;
     private final JwtTokenUtil jwtTokenUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = getToken(request);
+        String accessToken = jwtTokenUtil.getToken(request, RequestHeaderType.X_AUTH_ACCESS_TOKEN);
         if (accessToken != null) {
-            try {
-                this.checkLogout(accessToken);
-                String email = jwtTokenUtil.getEmail(accessToken);
-                this.validateAccessToken(accessToken);
+            tokenService.validate(accessToken);
 
-                UserDetails userDetails = userDetailService.loadUserByUsername(email);
-                this.setAuthentication(request, userDetails);
+            String email = tokenService.getEmail(accessToken);
 
-            } catch(AuthenticationException e) {
-                // this.jwtAuthenticationFailHandler.handle(request, response, e);
-            }
+            UserDetails userDetails = userDetailService.loadUserByUsername(email);
+            this.setAuthentication(request, userDetails);
 
         }
         filterChain.doFilter(request, response);
     }
 
-    private String getToken(HttpServletRequest request) {
-        String authorization = request.getHeader("X-AUTH-TOKEN");
-
-        if (!(StringUtils.hasText(authorization) && authorization.startsWith(JWT_TOKEN_EXCEPT_STRING))) { return null; }
-
-        return authorization.substring(JWT_TOKEN_STRING_START);
-    }
-
-    private void validateAccessToken(String accessToken) {
-        if (!jwtTokenUtil.validateToken(accessToken)) {
-
-        }
-    }
-
-    private void checkLogout(String accessToekn) {
-        // Redis에서 로그아웃 체크
-    }
-
     private void setAuthentication(HttpServletRequest request, UserDetails userDetails) {
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(request, userDetails);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }

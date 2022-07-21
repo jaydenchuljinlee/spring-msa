@@ -2,33 +2,60 @@ package com.bbrick.auth.view.web.auth;
 
 import com.bbrick.auth.comn.BaseResponse;
 import com.bbrick.auth.comn.web.WebConstants;
+import com.bbrick.auth.core.auth.dto.TokenDto;
 import com.bbrick.auth.core.user.application.UserLoginService;
 import com.bbrick.auth.view.web.auth.dto.LoginRequest;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @AllArgsConstructor
 @RestController
 public class AuthController {
     private final UserLoginService userLoginService;
 
     @PostMapping(WebConstants.URL.LOGIN_REQUEST_PATH)
-    public ResponseEntity<BaseResponse<Void>> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<BaseResponse<TokenDto>> login(@RequestBody LoginRequest request) {
         // Servlet Filter를 통해 Login API 처리가 된다.
 
-        userLoginService.login(request);
+        TokenDto tokenDto = userLoginService.login(request);
 
-        return ResponseEntity.ok(BaseResponse.success());
+        return ResponseEntity
+                .ok()
+                .header("Authorization", tokenDto.getAcccessToken())
+                .body(BaseResponse.success(tokenDto));
     }
 
     @PostMapping(WebConstants.URL.LOGOUT_REQUEST_PATH)
-    public ResponseEntity<BaseResponse<Void>> logout() {
-        // Servlet Filter를 통해 Logout API 처리가 된다.
+    public ResponseEntity<BaseResponse<Void>> logout(
+            @RequestHeader("X-AUTH-ACCESS-TOKEN") String accessToken,
+            @RequestHeader("X-AUTH-REFRESH-TOKEN") String refreshToken
+    ) {
+        TokenDto tokenDto = TokenDto.of(accessToken, refreshToken);
+
+        userLoginService.logout(tokenDto);
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN.value())
+                .body(BaseResponse.success());
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<BaseResponse<TokenDto>> reissue(
+            @RequestHeader("X-AUTH-REFRESH-TOKEN") String refreshToken
+    ) {
+       TokenDto tokenDto = userLoginService.reissue(refreshToken);
+       return ResponseEntity.ok(BaseResponse.success(tokenDto));
+    }
+
+    @GetMapping("/ping")
+    public ResponseEntity<BaseResponse<Void>> ping() {
+
+        log.debug("test");
+
         return ResponseEntity.ok(BaseResponse.success());
     }
 }

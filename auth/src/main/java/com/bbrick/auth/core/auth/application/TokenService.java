@@ -1,5 +1,6 @@
 package com.bbrick.auth.core.auth.application;
 
+import com.bbrick.auth.comn.request.header.dto.RequestHeaderType;
 import com.bbrick.auth.comn.utils.JwtTokenUtil;
 import com.bbrick.auth.core.auth.domain.exceptions.InvalideTokenException;
 import com.bbrick.auth.core.auth.domain.repository.LogoutAccessTokenRedisRepository;
@@ -10,28 +11,27 @@ import com.bbrick.auth.core.auth.dto.TokenDto;
 import com.bbrick.auth.core.user.application.UserDetailService;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class TokenService {
     private JwtTokenUtil jwtTokenUtil;
-    private UserDetailService userDetailService;
     private final LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
 
-    public boolean validateToken(String token) { return this.jwtTokenUtil.validateToken(token); }
+    public void validate(String token) {
+        checkLogout(token);
+        validateAccessToken(token);
+    }
 
-    public Authentication getAuthentication(String token) {
-        String email = jwtTokenUtil.getEmail(token);
-        UserDetails userDetails = userDetailService.loadUserByUsername(email);
-
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    public void validateAccessToken(String token) {
+        if (this.jwtTokenUtil.isExpiredToken(token)) {
+            throw new InvalideTokenException("Token was expired");
+        }
     }
 
     @CacheEvict(value = "user", key = "#email")
@@ -52,16 +52,40 @@ public class TokenService {
     }
 
     public LogoutAccessToken logoutAccessToken(LogoutAccessToken logoutAccessToken) {
-        return logoutAccessTokenRedisRepository.save(logoutAccessToken);
+
+        LogoutAccessToken token = logoutAccessTokenRedisRepository.save(logoutAccessToken);
+
+        return token;
     }
 
     public RefreshToken getRefreshToken(String email) {
         Optional<RefreshToken> optional = refreshTokenRedisRepository.findById(email);
 
         if (optional.isEmpty()) {
-           throw new InvalideTokenException("there is no refresh token");
+           throw new InvalideTokenException("There is no refresh token");
         }
 
         return optional.get();
+    }
+
+    public void checkLogout(String accessToken) {
+        if (logoutAccessTokenRedisRepository.existsById(accessToken)) {
+            throw new InvalideTokenException("Token is already logged out");
+        }
+    }
+
+    public String getEmail(String token) {
+        return jwtTokenUtil.getEmail(token);
+    }
+
+    public String getToken(HttpServletRequest request, RequestHeaderType requestHeaderType) {
+        return this.jwtTokenUtil.getToken(request, requestHeaderType);
+    }
+
+    public TokenDto getTokenDto(HttpServletRequest request) {
+        String accessToken = this.getToken(request, RequestHeaderType.X_AUTH_ACCESS_TOKEN);
+        String refreshToken = this.getToken(request, RequestHeaderType.X_AUTH_REFRESH_TOKEN);
+
+        return TokenDto.of(accessToken, refreshToken);
     }
 }
