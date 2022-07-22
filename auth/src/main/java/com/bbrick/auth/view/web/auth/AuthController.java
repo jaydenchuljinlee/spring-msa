@@ -8,6 +8,7 @@ import com.bbrick.auth.view.web.auth.dto.LoginRequest;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,8 @@ public class AuthController {
 
         return ResponseEntity
                 .ok()
-                .header("Authorization", tokenDto.getAcccessToken())
+                .header("X-AUTH-ACCESS-TOKEN", tokenDto.getAcccessToken())
+                .header("X-AUTH-REFRESH-TOKEN", tokenDto.getRefreshToken())
                 .body(BaseResponse.success(tokenDto));
     }
 

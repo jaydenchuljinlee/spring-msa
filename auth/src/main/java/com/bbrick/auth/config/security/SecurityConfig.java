@@ -44,7 +44,6 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final AuthenticationService authenticationService;
     private final UserDetailService userDetailService;
     private final TokenService tokenService;
     private final Environment environment;
@@ -64,21 +63,14 @@ public class SecurityConfig {
     public SecurityFilterChain jwtFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-
-                .addFilterBefore(this.jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-
-                .requestMatchers(new OrRequestMatcher(
-                        new AntPathRequestMatcher(WebConstants.URL.LOGIN_REQUEST_PATH, HttpMethod.POST.name()),
-                        new AntPathRequestMatcher(WebConstants.URL.USER_JOIN_PATH, HttpMethod.POST.name()),
-                        new AntPathRequestMatcher(WebConstants.URL.USER_JOIN_PATH_WITH_TRAILING_SLASH, HttpMethod.POST.name())
-                )).permitAll()
+                .antMatchers(
+                        WebConstants.URL.LOGIN_REQUEST_PATH,
+                        WebConstants.URL.USER_JOIN_PATH_WITH_TRAILING_SLASH
+                ).permitAll()
                 .anyRequest().authenticated()
-                .and()
 
+                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(((request, response, authException) -> {
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -87,25 +79,13 @@ public class SecurityConfig {
                             new ObjectMapper().writeValueAsString(BaseResponse.fail(authException.getMessage()))
                     );
                 }))
-                .and()
 
-                .logout()
-                .addLogoutHandler(new JwtLogoutHandler(
-                        this.tokenService,
-                        new JwtTokenUtil()
-                ))
-                .logoutRequestMatcher(new OrRequestMatcher(
-                        new AntPathRequestMatcher(WebConstants.URL.LOGOUT_REQUEST_PATH, HttpMethod.POST.name()),
-                        new AntPathRequestMatcher(WebConstants.URL.LOGOUT_REQUEST_PATH_WITH_TRAILING_SLASH, HttpMethod.POST.name())
-                ))
-                .logoutSuccessHandler(((request, response, authentication) -> {
-                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                    response.setStatus(HttpStatus.FORBIDDEN.value());
-                    response.getWriter().println(
-                            new ObjectMapper().writeValueAsString(BaseResponse.success())
-                    );
-                }))
-                .deleteCookies(WebConstants.Session.COOKIE_NAME);
+                .and()
+                .logout().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                .and()
+                .addFilterBefore(this.jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -119,9 +99,5 @@ public class SecurityConfig {
                 new JwtAuthenticationFailHandler(),
                 new JwtTokenUtil()
         );
-    }
-
-    public EmailPasswordAuthenticationProvider emailPasswordAuthenticationProvider() {
-        return new EmailPasswordAuthenticationProvider(this.authenticationService);
     }
 }
