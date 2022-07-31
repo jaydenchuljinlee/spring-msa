@@ -1,4 +1,4 @@
-package com.bbrick.fund.kafka;
+package com.bbrick.fund.view.web.kafka;
 
 import com.bbrick.fund.config.kafka.KafkaProducer;
 import lombok.RequiredArgsConstructor;
