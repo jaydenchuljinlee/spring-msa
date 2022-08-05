@@ -2,15 +2,11 @@ package com.bbrick.fund.core.order.domain.entity;
 
 import com.bbrick.fund.comm.entity.BaseEntity;
 import com.bbrick.fund.core.order.domain.dto.OrderRequest;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Table @Entity
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED) @Getter
 public class Order extends BaseEntity {
     @Column(name ="user_id")
@@ -32,6 +28,16 @@ public class Order extends BaseEntity {
     @Column(name = "order_type")
     @Enumerated(EnumType.STRING)
     private OrderType orderType;
+
+    @Builder
+    protected Order(long userId, String proudctId, int quantity, long price, OrderStatus orderStatus, OrderType orderType) {
+        this.userId = userId;
+        this.proudctId = proudctId;
+        this.quantity = quantity;
+        this.price = price;
+        this.orderStatus = orderStatus;
+        this.orderType = orderType;
+    }
 
     public static Order convertFromOrderRequest(OrderRequest request) {
         return Order.builder()

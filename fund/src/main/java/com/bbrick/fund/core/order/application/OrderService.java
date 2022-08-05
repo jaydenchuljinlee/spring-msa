@@ -23,7 +23,7 @@ public class OrderService {
         // TODO kafka에 순서대로 적재
 
         Order result = this.orderRepository.save(order);
-        
+
         return result;
    }
 }

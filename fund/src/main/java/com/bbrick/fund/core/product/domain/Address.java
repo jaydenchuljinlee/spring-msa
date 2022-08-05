@@ -1,8 +1,11 @@
 package com.bbrick.fund.core.product.domain;
 
+import lombok.Getter;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+@Getter
 @Embeddable
 public class Address {
     @Column(name ="address1")
