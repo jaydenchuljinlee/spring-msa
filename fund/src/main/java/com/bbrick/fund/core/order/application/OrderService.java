@@ -15,13 +15,15 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
     @Transactional
-    private void processPurchase(OrderRequest request) {
+    public Order processPurchase(OrderRequest request) {
         // TODO request는 사전 검사
 
         Order order = Order.convertFromOrderRequest(request);
 
         // TODO kafka에 순서대로 적재
 
-        this.orderRepository.save(order);
+        Order result = this.orderRepository.save(order);
+        
+        return result;
    }
 }
