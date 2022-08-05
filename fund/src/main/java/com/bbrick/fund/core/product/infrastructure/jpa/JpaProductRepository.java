@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.function.Supplier;
 
-interface InnerProductRepository extends JpaRepository<Product, String> {
+interface InnerProductRepository extends JpaRepository<Product, Long> {
 }
 
 @Repository

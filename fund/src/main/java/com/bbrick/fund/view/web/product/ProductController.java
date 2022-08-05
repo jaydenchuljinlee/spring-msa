@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
     private final ProductService productService;
 
-    @PostMapping(ProductConstants.URL.PRODUCT_REGISTERING_PATH)
-    public ResponseEntity<BaseResponse<Product>> registProduct(ProductRequest product) {
+    @PostMapping(ProductConstants.URL.PRODUCT_PATH)
+    public ResponseEntity<BaseResponse<Product>> registProduct(@RequestBody ProductRequest product) {
 
         Product result = productService.registProduct(product);
 

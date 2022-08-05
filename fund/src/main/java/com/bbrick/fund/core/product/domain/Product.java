@@ -12,6 +12,9 @@ import javax.persistence.*;
 @Table @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) @Getter
 public class Product extends BaseEntity {
+    @Column(name = "product_code")
+    private String productCode;
+
     @Column(name = "product_name")
     private String productName;
 
@@ -22,7 +25,8 @@ public class Product extends BaseEntity {
     private int amount;
 
     @Builder
-    protected Product(String productName, Address address, int amount) {
+    protected Product(String productCode, String productName, Address address, int amount) {
+        this.productCode = productCode;
         this.productName = productName;
         this.address = address;
         this.amount = amount;
@@ -30,6 +34,7 @@ public class Product extends BaseEntity {
 
     public static Product convertFromProductRequest(ProductRequest productRequest) {
         return new ProductBuilder()
+                .productCode(productRequest.getProductCode())
                 .productName(productRequest.getProductName())
                 .address(productRequest.getAddress())
                 .amount(productRequest.getAmount())
