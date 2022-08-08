@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 interface InnerProductRepository extends JpaRepository<Product, Long> {
@@ -16,6 +17,13 @@ interface InnerProductRepository extends JpaRepository<Product, Long> {
 @RequiredArgsConstructor
 public class JpaProductRepository implements ProductRepository {
     private final InnerProductRepository repository;
+
+    @Override
+    public Optional<Product> findById(long productId) {
+        return this.wrapIntegrationException(
+                () -> this.repository.findById(productId)
+        );
+    }
 
     @Override
     public Product save(Product product) {

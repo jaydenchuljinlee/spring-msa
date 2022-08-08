@@ -15,7 +15,7 @@ public class OrderRequest {
     private long userId;
     @NotBlank
     @ProductIdFormat
-    private String proudctId;
+    private long proudctId;
     @NotBlank
     private int quantity;
     @NotBlank

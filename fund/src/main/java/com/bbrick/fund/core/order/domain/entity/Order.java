@@ -13,7 +13,7 @@ public class Order extends BaseEntity {
     private long userId;
 
     @Column(name = "product_id")
-    private String proudctId;
+    private long proudctId;
 
     @Column(name ="quantity")
     private int quantity;
@@ -30,7 +30,7 @@ public class Order extends BaseEntity {
     private OrderType orderType;
 
     @Builder
-    protected Order(long userId, String proudctId, int quantity, long price, OrderStatus orderStatus, OrderType orderType) {
+    protected Order(long userId, long proudctId, int quantity, long price, OrderStatus orderStatus, OrderType orderType) {
         this.userId = userId;
         this.proudctId = proudctId;
         this.quantity = quantity;

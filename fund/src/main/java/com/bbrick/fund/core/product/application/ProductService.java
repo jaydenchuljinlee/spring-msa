@@ -6,10 +6,23 @@ import com.bbrick.fund.core.product.infrastructure.jpa.JpaProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class ProductService {
     private final JpaProductRepository jpaProductRepository;
+
+    public Product getProductById(long productId) {
+        Optional<Product> optional = jpaProductRepository.findById(productId);
+
+        if (optional.isEmpty()) {
+            // TODO product not founded
+        }
+
+        return optional.get();
+
+    }
 
     public Product registProduct(ProductRequest productRequest) {
 
