@@ -14,15 +14,12 @@ public class OrderRequest {
     @NotBlank
     private long userId;
     @NotBlank
-    @ProductIdFormat
-    private long proudctId;
+    //@ProductIdFormat
+    private long productId;
     @NotBlank
     private int quantity;
     @NotBlank
     private long price;
-    @NotBlank
-    @EnumFormat(enumClass = OrderStatus.class)
-    private OrderStatus orderStatus;
     @NotBlank
     @EnumFormat(enumClass = OrderType.class)
     private OrderType orderType;

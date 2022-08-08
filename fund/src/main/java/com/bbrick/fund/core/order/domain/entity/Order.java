@@ -13,7 +13,7 @@ public class Order extends BaseEntity {
     private long userId;
 
     @Column(name = "product_id")
-    private long proudctId;
+    private long productId;
 
     @Column(name ="quantity")
     private int quantity;
@@ -22,17 +22,17 @@ public class Order extends BaseEntity {
     private long price;
 
     @Column(name = "order_status")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private OrderStatus orderStatus;
 
     @Column(name = "order_type")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private OrderType orderType;
 
     @Builder
-    protected Order(long userId, long proudctId, int quantity, long price, OrderStatus orderStatus, OrderType orderType) {
+    protected Order(long userId, long productId, int quantity, long price, OrderStatus orderStatus, OrderType orderType) {
         this.userId = userId;
-        this.proudctId = proudctId;
+        this.productId = productId;
         this.quantity = quantity;
         this.price = price;
         this.orderStatus = orderStatus;
@@ -42,10 +42,10 @@ public class Order extends BaseEntity {
     public static Order convertFromOrderRequest(OrderRequest request) {
         return Order.builder()
                 .userId(request.getUserId())
-                .proudctId(request.getProudctId())
+                .productId(request.getProductId())
                 .quantity(request.getQuantity())
                 .price(request.getPrice())
-                .orderStatus(request.getOrderStatus())
+                .orderStatus(OrderStatus.PROCEEDING)
                 .orderType(request.getOrderType())
                 .build();
     }

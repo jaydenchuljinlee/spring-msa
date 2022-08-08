@@ -21,7 +21,7 @@ public class OrderService {
     public Order processPurchase(OrderRequest request) {
         // TODO request는 사전 검사
 
-        Product product = productService.getProductById(request.getProudctId());
+        Product product = productService.getProductById(request.getProductId());
 
         Order order = Order.convertFromOrderRequest(request);
 

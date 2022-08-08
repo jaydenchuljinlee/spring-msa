@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -18,7 +19,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping(OrderConstants.URL.ORDER_REQUEST_PURCHASE)
-    public ResponseEntity<BaseResponse<Order>> purchase(OrderRequest order) {
+    public ResponseEntity<BaseResponse<Order>> purchase(@RequestBody OrderRequest order) {
 
         Order result = orderService.processPurchase(order);
 
