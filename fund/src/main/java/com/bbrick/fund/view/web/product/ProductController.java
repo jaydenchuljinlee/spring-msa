@@ -23,6 +23,7 @@ public class ProductController {
 
         Product result = productService.registProduct(product);
 
+
         return ResponseEntity
                 .ok()
                 .body(BaseResponse.success());
