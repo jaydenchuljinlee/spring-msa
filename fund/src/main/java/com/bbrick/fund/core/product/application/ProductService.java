@@ -4,10 +4,12 @@ import com.bbrick.fund.core.product.domain.Product;
 import com.bbrick.fund.core.product.domain.dto.ProductRequest;
 import com.bbrick.fund.core.product.infrastructure.jpa.JpaProductRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ProductService {

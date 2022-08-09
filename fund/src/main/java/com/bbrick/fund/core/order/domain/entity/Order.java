@@ -6,7 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Table @Entity
+@Table(name = "`order`") @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) @Getter
 public class Order extends BaseEntity {
     @Column(name ="user_id")
@@ -40,7 +40,7 @@ public class Order extends BaseEntity {
     }
 
     public static Order convertFromOrderRequest(OrderRequest request) {
-        return Order.builder()
+        return new OrderBuilder()
                 .userId(request.getUserId())
                 .productId(request.getProductId())
                 .quantity(request.getQuantity())

@@ -2,7 +2,7 @@ package com.bbrick.fund.core.order.application;
 
 import com.bbrick.fund.core.order.domain.dto.OrderRequest;
 import com.bbrick.fund.core.order.domain.entity.Order;
-import com.bbrick.fund.core.order.domain.repository.OrderRepository;
+import com.bbrick.fund.core.order.infrastructure.jpa.JpaOrderRepository;
 import com.bbrick.fund.core.product.application.ProductService;
 import com.bbrick.fund.core.product.domain.Product;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 @Service
 public class OrderService {
-    private final OrderRepository orderRepository;
+    private final JpaOrderRepository jpaOrderRepository;
     private final ProductService productService;
 
     @Transactional
@@ -27,7 +27,7 @@ public class OrderService {
 
         // TODO kafka에 순서대로 적재
 
-        Order result = this.orderRepository.save(order);
+        Order result = this.jpaOrderRepository.save(order);
 
         return result;
    }
