@@ -15,7 +15,7 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
       KAFKA_ADVERTISED_PORT: 9092
-      KAFKA_CREATE_TOFICS: "sell:2:2,order:2:2"
+      KAFKA_CREATE_TOFICS: "order:2:2"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/rund/docker.sock
