@@ -49,4 +49,8 @@ public class Order extends BaseEntity {
                 .orderType(request.getOrderType())
                 .build();
     }
+
+    public void reducePrice(long price) {
+        this.price -= price;
+    }
 }

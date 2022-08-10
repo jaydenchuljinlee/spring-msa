@@ -21,7 +21,7 @@ public class OrderController {
     @PostMapping(OrderConstants.URL.ORDER_REQUEST_PURCHASE)
     public ResponseEntity<BaseResponse<Order>> purchase(@RequestBody OrderRequest order) {
 
-        Order result = orderService.processPurchase(order);
+        Order result = orderService.saveOrder(order);
 
         return ResponseEntity
                 .ok()
