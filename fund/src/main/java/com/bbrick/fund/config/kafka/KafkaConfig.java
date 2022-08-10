@@ -44,7 +44,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaProducer sender(KafkaTemplate<String, String> template) {
+    public KafkaProducer sender(KafkaTemplate<String, Object> template) {
         return new KafkaProducer(template);
     }
 
