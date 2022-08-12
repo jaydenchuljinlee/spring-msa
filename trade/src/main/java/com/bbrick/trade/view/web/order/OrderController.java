@@ -1,10 +1,10 @@
-package com.bbrick.fund.view.web.order;
+package com.bbrick.trade.view.web.order;
 
-import com.bbrick.fund.comm.BaseResponse;
-import com.bbrick.fund.comm.web.constants.OrderConstants;
-import com.bbrick.fund.core.order.application.OrderService;
-import com.bbrick.fund.core.order.domain.dto.OrderRequest;
-import com.bbrick.fund.core.order.domain.entity.Order;
+import com.bbrick.trade.comm.BaseResponse;
+import com.bbrick.trade.comm.web.constants.OrderConstants;
+import com.bbrick.trade.core.order.application.OrderService;
+import com.bbrick.trade.core.order.domain.dto.OrderRequest;
+import com.bbrick.trade.core.order.domain.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

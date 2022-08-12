@@ -1,4 +1,4 @@
-package com.bbrick.fund.config.kafka;
+package com.bbrick.trade.config.kafka;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
