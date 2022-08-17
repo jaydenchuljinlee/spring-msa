@@ -8,18 +8,32 @@ group = 'com.bbrick'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
 repositories {
 	mavenCentral()
 }
 
 ext {
+	set('testcontainersVersion', "1.16.2")
 	set('springCloudVersion', "2021.0.3")
 }
 
 dependencies {
+	// web
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
 	// utils
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
 
+	compileOnly("org.projectlombok:lombok:1.18.12")
+	annotationProcessor( "org.projectlombok:lombok:1.18.12")
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
@@ -27,13 +41,11 @@ dependencies {
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-	// jpa
+	// db
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly("mysql:mysql-connector-java")
 	// security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	// data
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
 	//cloud
 	implementation 'org.springframework.cloud:spring-cloud-starter'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
@@ -42,18 +54,23 @@ dependencies {
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:mysql'
+	testImplementation 'io.rest-assured:rest-assured:4.4.0'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 
-	runtimeOnly("mysql:mysql-connector-java")
-	compileOnly("org.projectlombok:lombok:1.18.12")
-	annotationProcessor( "org.projectlombok:lombok:1.18.12")
+
+
 }
 
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
 	}
 }
 
-tasks.named('test') {
+test {
 	useJUnitPlatform()
 }

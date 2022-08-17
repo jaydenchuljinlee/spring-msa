@@ -1,10 +1,9 @@
 package com.bbrick.auth;
 
+import com.bbrick.auth.integration.IntegrationTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class AuthApplicationTests {
+class AuthApplicationTests extends IntegrationTest {
 
 	@Test
 	void contextLoads() {

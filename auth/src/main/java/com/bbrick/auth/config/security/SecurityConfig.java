@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(
                         WebConstants.URL.LOGIN_REQUEST_PATH,
-                        WebConstants.URL.USER_JOIN_PATH_WITH_TRAILING_SLASH
+                        WebConstants.URL.USER_JOIN_PATH
                 ).permitAll()
                 .anyRequest().authenticated()
 
