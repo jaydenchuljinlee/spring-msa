@@ -3,11 +3,9 @@ package com.bbrick.auth.acceptance.user.steps;
 import com.bbrick.auth.core.user.domain.entity.Gender;
 import com.bbrick.auth.view.web.user.dto.UserJoinRequest;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 import static com.bbrick.auth.acceptance.common.ResponseAssertions.assertResponseIsSuccess;
 import static com.bbrick.auth.acceptance.common.ResponseAssertions.assertStatusCode;
