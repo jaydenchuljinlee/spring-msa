@@ -3,6 +3,7 @@ package com.bbrick.auth.core.auth.application;
 import com.bbrick.auth.core.auth.domain.exceptions.AuthenticationFailException;
 import com.bbrick.auth.core.user.domain.entity.UserDetail;
 import com.bbrick.auth.core.auth.domain.PasswordEncoder;
+import com.bbrick.auth.core.user.domain.exceptions.UserNotFoundException;
 import com.bbrick.auth.core.user.domain.repository.UserDetailRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

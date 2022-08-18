@@ -7,8 +7,14 @@ public class AuthenticationFailException extends AuthenticationException {
         super(message);
     }
 
+    public AuthenticationFailException(String message, Throwable cause) { super(message, cause); }
+
     public static AuthenticationFailException userNotRegistered(String email) {
         return new AuthenticationFailException("Authentication failed - User not registered with the email: " + email);
+    }
+
+    public static AuthenticationFailException userNotRegistered(String email, Throwable cause) {
+        return new AuthenticationFailException("Authentication failed - User not registered with the email: " + email, cause);
     }
 
     public static AuthenticationFailException passwordNotMatched(String email) {

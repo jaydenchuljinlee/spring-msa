@@ -4,6 +4,8 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.springframework.http.HttpStatus;
 
+import java.util.function.Supplier;
+
 import static com.bbrick.auth.acceptance.common.ResponseUtils.extractBaseResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,4 +26,5 @@ public class ResponseAssertions {
     public static void assertResponseIsFalse(ExtractableResponse<Response> response) {
         assertThat(extractBaseResponse(response).isSuccess()).isFalse();
     }
+
 }
