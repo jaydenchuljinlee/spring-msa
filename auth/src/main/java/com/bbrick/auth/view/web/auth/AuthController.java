@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @AllArgsConstructor
 @RestController
@@ -32,12 +34,13 @@ public class AuthController {
 
     @PostMapping(WebConstants.URL.LOGOUT_REQUEST_PATH)
     public ResponseEntity<BaseResponse<Void>> logout(
+            HttpServletRequest request,
             @RequestHeader("X-AUTH-ACCESS-TOKEN") String accessToken,
             @RequestHeader("X-AUTH-REFRESH-TOKEN") String refreshToken
     ) {
         TokenDto tokenDto = TokenDto.of(accessToken, refreshToken);
 
-        userLoginService.logout(tokenDto);
+        userLoginService.logout(request, tokenDto);
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN.value())
                 .body(BaseResponse.success());

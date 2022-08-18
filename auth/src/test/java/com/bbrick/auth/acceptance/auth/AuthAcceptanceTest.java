@@ -1,6 +1,7 @@
 package com.bbrick.auth.acceptance.auth;
 
 import com.bbrick.auth.acceptance.AcceptanceTest;
+import com.bbrick.auth.acceptance.common.AuthToken;
 import com.bbrick.auth.view.web.auth.dto.LoginRequest;
 import com.bbrick.auth.view.web.user.dto.UserJoinRequest;
 import com.bbrick.auth.view.web.user.dto.UserJoinResponse;
@@ -15,9 +16,9 @@ import static com.bbrick.auth.acceptance.user.steps.UserAcceptanceTestStep.회�
 @DisplayName("인증 Acceptance Test")
 class AuthAcceptanceTest extends AcceptanceTest {
 
-    @DisplayName("로그인 기능")
+    @DisplayName("인증 기능")
     @Test
-    void loginTest() {
+    void authTest() {
         // given
         회원_가입이_되어있다();
 
@@ -36,8 +37,15 @@ class AuthAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> 로그인_성공_응답 = 로그인_요청을_한다(successRequest);
-
         // then
         로그인_요청에_성공한다(로그인_성공_응답);
+        AuthToken 인증_토큰 = 토근정보를_반환한다(로그인_성공_응답);
+        // 인증_토큰을_저장한다(인증_토큰);
+
+        // when
+        ExtractableResponse<Response> 로그아웃_성공_응답 = 로그아웃_요청을_한다(인증_토큰);
+
+        // then
+        로그아웃_요청에_성공한다(로그아웃_성공_응답);
     }
 }

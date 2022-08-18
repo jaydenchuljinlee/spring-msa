@@ -1,5 +1,6 @@
 package com.bbrick.auth.core.user.application;
 
+import com.bbrick.auth.comn.request.header.dto.RequestHeaderType;
 import com.bbrick.auth.comn.utils.JwtTokenUtil;
 import com.bbrick.auth.core.auth.application.AuthenticationService;
 import com.bbrick.auth.core.auth.application.TokenService;
@@ -17,6 +18,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -38,9 +41,9 @@ public class UserLoginService {
         return TokenDto.of(accessToken, refreshToken.getRefreshToken());
     }
 
-    public LogoutAccessToken logout(TokenDto tokenDto) {
-
-        String email = tokenService.getEmail(tokenDto.getAcccessToken());
+    public LogoutAccessToken logout(HttpServletRequest request, TokenDto tokenDto) {
+        String token = tokenService.getToken(request, RequestHeaderType.X_AUTH_ACCESS_TOKEN);
+        String email = tokenService.getEmail(token);
 
         return tokenService.proccessLogout(email, tokenDto);
     }
