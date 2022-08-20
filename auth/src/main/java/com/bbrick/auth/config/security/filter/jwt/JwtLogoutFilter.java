@@ -25,8 +25,11 @@ public class JwtLogoutFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            String accessToken = jwtTokenUtil.getToken(request, RequestHeaderType.X_AUTH_ACCESS_TOKEN);
-            String refreshToken = jwtTokenUtil.getToken(request, RequestHeaderType.X_AUTH_REFRESH_TOKEN);
+            String accessTokenHeader = request.getHeader(RequestHeaderType.X_AUTH_ACCESS_TOKEN.value());
+            String refreshTokenHeader = request.getHeader(RequestHeaderType.X_AUTH_REFRESH_TOKEN.value());
+
+            String accessToken = jwtTokenUtil.getToken(accessTokenHeader);
+            String refreshToken = jwtTokenUtil.getToken(refreshTokenHeader);
 
             String email = jwtTokenUtil.getEmail(accessToken);
 

@@ -80,7 +80,8 @@ public class TokenService {
     }
 
     public String getToken(HttpServletRequest request, RequestHeaderType requestHeaderType) {
-        return this.jwtTokenUtil.getToken(request, requestHeaderType);
+        String token = request.getHeader(requestHeaderType.value());
+        return this.jwtTokenUtil.getToken(token);
     }
 
     public TokenDto getTokenDto(HttpServletRequest request) {

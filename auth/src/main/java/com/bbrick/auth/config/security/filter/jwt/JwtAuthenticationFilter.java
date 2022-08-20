@@ -2,8 +2,6 @@ package com.bbrick.auth.config.security.filter.jwt;
 
 import com.bbrick.auth.comn.request.header.dto.RequestHeaderType;
 import com.bbrick.auth.comn.utils.JwtTokenUtil;
-import com.bbrick.auth.config.security.handler.jwt.JwtAuthenticationFailHandler;
-import com.bbrick.auth.config.security.handler.jwt.JwtAuthenticationSuccessHandler;
 import com.bbrick.auth.core.auth.application.TokenService;
 import com.bbrick.auth.core.user.application.UserDetailService;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
-
-import static java.util.stream.Collectors.joining;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,7 +27,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = jwtTokenUtil.getToken(request, RequestHeaderType.X_AUTH_ACCESS_TOKEN);
+        String token = request.getHeader(RequestHeaderType.X_AUTH_ACCESS_TOKEN.value());
+
+        String accessToken = jwtTokenUtil.getToken(token);
         if (accessToken != null) {
             tokenService.validate(accessToken);
 

@@ -1,26 +1,26 @@
 package com.bbrick.auth.comn.utils;
 
-import com.bbrick.auth.comn.request.header.dto.RequestHeaderType;
+import com.bbrick.auth.comn.properties.JwtProperties;
 import com.bbrick.auth.core.auth.dto.LogoutAccessToken;
 import com.bbrick.auth.core.auth.dto.RefreshToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Date;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class JwtTokenUtil {
-    @Value("${config.auth.secret}")
-    private String secret;
+
+    private final JwtProperties jwtProperties;
 
     // private final Long tokenExpirationHour = 30 * 60 * 1000L;
     private static final String JWT_TOKEN_EXCEPT_STRING = "Bearer ";
@@ -78,8 +78,9 @@ public class JwtTokenUtil {
                 .getBody();
     }
 
-    private Key getSignKey() {
-        byte[] keyBytes = secret.getBytes();
+    public Key getSignKey() {
+        // log.info(secret);
+        byte[] keyBytes = jwtProperties.getSecret().getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -90,9 +91,7 @@ public class JwtTokenUtil {
         return expiration.getTime() - now.getTime();
     }
 
-    public String getToken(HttpServletRequest request, RequestHeaderType tokenType) {
-        String authorization = request.getHeader(tokenType.value());
-
+    public String getToken(String authorization) {
         if (!(StringUtils.hasText(authorization) && authorization.startsWith(JWT_TOKEN_EXCEPT_STRING))) { return null; }
 
         return authorization.substring(JWT_TOKEN_STRING_START);

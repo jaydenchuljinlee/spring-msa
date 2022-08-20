@@ -1,6 +1,7 @@
 package com.bbrick.auth.config.security;
 
 import com.bbrick.auth.comn.BaseResponse;
+import com.bbrick.auth.comn.properties.JwtProperties;
 import com.bbrick.auth.comn.utils.JwtTokenUtil;
 import com.bbrick.auth.comn.web.WebConstants;
 import com.bbrick.auth.config.security.filter.jwt.JwtAuthenticationFilter;
@@ -25,6 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final UserDetailService userDetailService;
+    private final JwtTokenUtil jwtTokenUtil;
     private final TokenService tokenService;
     private final Environment environment;
 
@@ -75,7 +77,7 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter(
                 this.userDetailService,
                 this.tokenService,
-                new JwtTokenUtil()
+                this.jwtTokenUtil
         );
     }
 }
