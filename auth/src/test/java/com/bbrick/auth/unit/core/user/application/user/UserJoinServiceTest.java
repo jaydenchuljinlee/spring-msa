@@ -5,24 +5,19 @@ import com.bbrick.auth.core.user.application.UserJoinService;
 import com.bbrick.auth.core.user.domain.entity.Gender;
 import com.bbrick.auth.core.user.domain.entity.UserDetail;
 import com.bbrick.auth.core.user.domain.exceptions.UserDuplicationException;
-import com.bbrick.auth.core.user.domain.repository.UserDetailRepository;
 import com.bbrick.auth.core.user.infrastructure.jpa.JpaUserDetailRepository;
-import org.junit.Before;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UserJoinService 클래스")
