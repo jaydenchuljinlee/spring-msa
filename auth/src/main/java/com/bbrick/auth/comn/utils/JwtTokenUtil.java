@@ -79,7 +79,6 @@ public class JwtTokenUtil {
     }
 
     public Key getSignKey() {
-        // log.info(secret);
         byte[] keyBytes = jwtProperties.getSecret().getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
     }

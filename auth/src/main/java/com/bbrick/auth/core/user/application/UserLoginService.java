@@ -4,22 +4,15 @@ import com.bbrick.auth.comn.request.header.dto.RequestHeaderType;
 import com.bbrick.auth.comn.utils.JwtTokenUtil;
 import com.bbrick.auth.core.auth.application.AuthenticationService;
 import com.bbrick.auth.core.auth.application.TokenService;
-import com.bbrick.auth.core.auth.domain.PasswordEncoder;
 import com.bbrick.auth.core.auth.domain.exceptions.InvalideTokenException;
-import com.bbrick.auth.core.auth.domain.repository.LogoutAccessTokenRedisRepository;
-import com.bbrick.auth.core.auth.domain.repository.RefreshTokenRedisRepository;
 import com.bbrick.auth.core.auth.dto.LogoutAccessToken;
 import com.bbrick.auth.core.auth.dto.RefreshToken;
 import com.bbrick.auth.core.auth.dto.TokenDto;
 import com.bbrick.auth.view.web.auth.dto.LoginRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -73,11 +66,5 @@ public class UserLoginService {
 
         // TODO 지나지 않았으면 access token만 발금해준다.
         return TokenDto.of(accessToken, refreshToken);
-    }
-
-    private String getEmail() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails principal = (UserDetails) authentication.getPrincipal();
-        return principal.getUsername();
     }
 }

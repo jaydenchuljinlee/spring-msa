@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PasswordEncoder {
-    private final Argon2PasswordEncoder encoder = new Argon2PasswordEncoder();
+    private final Argon2PasswordEncoder encoder = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
 
     public String encode(String rawPasword) {
         return this.encoder.encode(rawPasword);

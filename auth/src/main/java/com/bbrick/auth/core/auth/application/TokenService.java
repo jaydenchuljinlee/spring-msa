@@ -8,12 +8,11 @@ import com.bbrick.auth.core.auth.domain.repository.RefreshTokenRedisRepository;
 import com.bbrick.auth.core.auth.dto.LogoutAccessToken;
 import com.bbrick.auth.core.auth.dto.RefreshToken;
 import com.bbrick.auth.core.auth.dto.TokenDto;
-import com.bbrick.auth.core.user.application.UserDetailService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Service

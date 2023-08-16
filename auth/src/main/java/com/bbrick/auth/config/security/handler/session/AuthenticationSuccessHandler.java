@@ -4,13 +4,13 @@ import com.bbrick.auth.comn.BaseResponse;
 import com.bbrick.auth.comn.web.session.SessionUtils;
 import com.bbrick.auth.config.security.authentication.AuthenticatedAuthentication;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class AuthenticationSuccessHandler {

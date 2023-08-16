@@ -5,10 +5,9 @@ import com.bbrick.auth.comn.entity.BaseEntity;
 import com.bbrick.auth.comn.validation.checker.BirthDateFormatChecker;
 import com.bbrick.auth.comn.validation.checker.PhoneNumberFormatChecker;
 import com.bbrick.auth.comn.validation.checker.UserNameFormatChecker;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
-
-import javax.persistence.*;
 
 @Getter
 @Entity

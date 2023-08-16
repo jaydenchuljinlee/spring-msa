@@ -2,9 +2,8 @@ package com.bbrick.auth.comn.validation.validator;
 
 import com.bbrick.auth.comn.validation.annotation.UserPasswordFormat;
 import com.bbrick.auth.comn.validation.checker.UserPasswordFormatChecker;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class UserPasswordFormatValidator implements ConstraintValidator<UserPasswordFormat, String> {
     private boolean nullable = false;

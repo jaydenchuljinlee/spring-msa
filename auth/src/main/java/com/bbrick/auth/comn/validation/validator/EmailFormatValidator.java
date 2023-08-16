@@ -2,9 +2,8 @@ package com.bbrick.auth.comn.validation.validator;
 
 import com.bbrick.auth.comn.validation.annotation.EmailFormat;
 import com.bbrick.auth.comn.validation.checker.EmailFormatChecker;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class EmailFormatValidator implements ConstraintValidator<EmailFormat, String> {
     private boolean nullable = false;

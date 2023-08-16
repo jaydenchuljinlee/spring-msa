@@ -2,9 +2,8 @@ package com.bbrick.auth.comn.validation.validator;
 
 import com.bbrick.auth.comn.validation.annotation.PhoneNumberFormat;
 import com.bbrick.auth.comn.validation.checker.PhoneNumberFormatChecker;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class PhoneNumberValidator implements ConstraintValidator<PhoneNumberFormat, String> {
     private boolean nullable = false;

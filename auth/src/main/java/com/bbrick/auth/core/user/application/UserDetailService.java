@@ -18,11 +18,6 @@ import java.util.Optional;
 public class UserDetailService implements UserDetailsService {
     private final UserDetailRepository userDetailRepository;
 
-    public UserDetail getUser(long userId) {
-        return this.userDetailRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
-    }
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<UserDetail> userDetailOptional = userDetailRepository.findByEmail(username);

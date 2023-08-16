@@ -6,6 +6,7 @@ import com.bbrick.auth.comn.validation.checker.UserNameFormatChecker;
 import com.bbrick.auth.core.user.domain.exceptions.UserDomainValueException;
 import com.bbrick.auth.comn.entity.BaseEntity;
 import com.bbrick.auth.comn.validation.checker.EmailFormatChecker;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,13 +16,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 
-@Entity @Getter
+@Entity
+@Getter
 @Table(name = "user_detail")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserDetail extends BaseEntity implements UserDetails {
@@ -62,10 +63,8 @@ public class UserDetail extends BaseEntity implements UserDetails {
         this.validateAndSetEncodedPassword(encodedPassword);
         this.validateAndSetName(userName);
         this.validateAndSetPhoneNumber(phoneNumber);
-        // this.validateAndSetBirthDate();
 
         this.gender = gender;
-        // this.address = address;
 
         this.userStatus = UserStatus.NORMAL;
         this.loginFailCount = FAIL_INIT_CNT;

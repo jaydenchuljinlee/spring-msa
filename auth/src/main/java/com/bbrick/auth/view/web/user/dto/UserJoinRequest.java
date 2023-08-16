@@ -3,9 +3,8 @@ package com.bbrick.auth.view.web.user.dto;
 import com.bbrick.auth.comn.validation.annotation.*;
 import com.bbrick.auth.core.user.domain.entity.Gender;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
 
 @Data
 public class UserJoinRequest {

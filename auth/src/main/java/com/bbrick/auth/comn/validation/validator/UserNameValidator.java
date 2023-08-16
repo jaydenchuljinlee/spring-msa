@@ -2,9 +2,8 @@ package com.bbrick.auth.comn.validation.validator;
 
 import com.bbrick.auth.comn.validation.annotation.UserNameForamt;
 import com.bbrick.auth.comn.validation.checker.UserNameFormatChecker;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class UserNameValidator implements ConstraintValidator<UserNameForamt, String> {
     private boolean nullable = false;

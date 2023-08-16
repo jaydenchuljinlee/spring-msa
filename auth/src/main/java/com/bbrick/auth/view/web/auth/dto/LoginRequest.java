@@ -2,9 +2,8 @@ package com.bbrick.auth.view.web.auth.dto;
 
 import com.bbrick.auth.comn.validation.annotation.EmailFormat;
 import com.bbrick.auth.comn.validation.annotation.UserPasswordFormat;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import javax.validation.constraints.NotNull;
 
 @Data
 public class LoginRequest {

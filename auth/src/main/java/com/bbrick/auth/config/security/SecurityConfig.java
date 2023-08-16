@@ -1,7 +1,6 @@
 package com.bbrick.auth.config.security;
 
 import com.bbrick.auth.comn.BaseResponse;
-import com.bbrick.auth.comn.properties.JwtProperties;
 import com.bbrick.auth.comn.utils.JwtTokenUtil;
 import com.bbrick.auth.comn.web.WebConstants;
 import com.bbrick.auth.config.security.filter.jwt.JwtAuthenticationFilter;
@@ -17,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -44,31 +44,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain jwtFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers(
-                        WebConstants.URL.LOGIN_REQUEST_PATH,
-                        WebConstants.URL.USER_JOIN_PATH
-                ).permitAll()
-                .anyRequest().authenticated()
-
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(((request, response, authException) -> {
-                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                    response.setStatus(HttpStatus.FORBIDDEN.value());
-                    response.getWriter().println(
-                            new ObjectMapper().writeValueAsString(BaseResponse.fail(authException.getMessage()))
-                    );
-                }))
-
-                .and()
-                .logout().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
-                .and()
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers(
+                                    WebConstants.URL.LOGIN_REQUEST_PATH,
+                                    WebConstants.URL.USER_JOIN_PATH
+                            ).permitAll()
+                            .anyRequest().authenticated();
+                })
+                .exceptionHandling(configurer -> {
+                    configurer.authenticationEntryPoint(((request, response, authException) -> {
+                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                        response.setStatus(HttpStatus.FORBIDDEN.value());
+                        response.getWriter().println(
+                                new ObjectMapper().writeValueAsString(BaseResponse.fail(authException.getMessage()))
+                        );
+                    }));
+                })
+                .logout(AbstractHttpConfigurer::disable)
+                .sessionManagement(authorize -> authorize.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(this.jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 

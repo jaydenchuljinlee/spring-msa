@@ -2,9 +2,8 @@ package com.bbrick.auth.comn.validation.validator;
 
 import com.bbrick.auth.comn.validation.annotation.EnumFormat;
 import com.bbrick.auth.comn.validation.checker.EnumFormatChecker;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class EnumValidator implements ConstraintValidator<EnumFormat, String> {
     private boolean nullable = false;

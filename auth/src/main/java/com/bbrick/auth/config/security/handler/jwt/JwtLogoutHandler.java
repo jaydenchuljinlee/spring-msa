@@ -1,18 +1,16 @@
 package com.bbrick.auth.config.security.handler.jwt;
 
 import com.bbrick.auth.comn.exceptions.AuthenticationException;
-import com.bbrick.auth.comn.request.header.dto.RequestHeaderType;
 import com.bbrick.auth.comn.utils.JwtTokenUtil;
 import com.bbrick.auth.core.auth.application.TokenService;
 import com.bbrick.auth.core.auth.dto.LogoutAccessToken;
 import com.bbrick.auth.core.auth.dto.TokenDto;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @RequiredArgsConstructor

@@ -1,7 +1,7 @@
 package com.bbrick.auth.comn.request.header.dto;
 
 public enum RequestHeaderType {
-    X_AUTH_ACCESS_TOKEN("X-AUTH-ACCESS-TOKEN"), X_AUTH_REFRESH_TOKEN("X-AUTH-ACCESS-TOKEN");
+    X_AUTH_ACCESS_TOKEN("X-AUTH-ACCESS-TOKEN"), X_AUTH_REFRESH_TOKEN("X-AUTH-REFRESH-TOKEN");
 
     private String value;
 

@@ -3,10 +3,9 @@ package com.bbrick.auth.comn.web.session;
 import com.bbrick.auth.comn.exceptions.AuthenticationException;
 import com.bbrick.auth.comn.web.WebConstants;
 import com.bbrick.auth.config.security.authentication.AuthenticatedAuthentication;
+import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-
-import javax.servlet.http.HttpSession;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SessionUtils {
